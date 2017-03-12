@@ -1,0 +1,310 @@
+%%% Template originaly created by Karol Kozioł (mail@karol-koziol.net) and modified for ShareLaTeX use
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\renewcommand\familydefault{\sfdefault}
+\usepackage{tgheros}
+\usepackage[defaultmono]{droidmono}
+
+\usepackage{amsmath,amssymb,amsthm,textcomp}
+\usepackage{enumerate}
+\usepackage{multicol}
+\usepackage{tikz}
+
+\usepackage{geometry}
+\geometry{total={210mm,297mm},
+left=25mm,right=25mm,%
+bindingoffset=0mm, top=20mm,bottom=20mm}
+
+
+\linespread{1.3}
+
+\newcommand{\linia}{\rule{\linewidth}{0.5pt}}
+
+% custom theorems if needed
+\newtheoremstyle{mytheor}
+    {1ex}{1ex}{\normalfont}{0pt}{\scshape}{.}{1ex}
+    {{\thmname{#1 }}{\thmnumber{#2}}{\thmnote{ (#3)}}}
+
+\theoremstyle{mytheor}
+\newtheorem{defi}{Definition}
+
+% my own titles
+\makeatletter
+\renewcommand{\maketitle}{
+\begin{center}
+\vspace{2ex}
+{\huge \textsc{\@title}}
+\vspace{1ex}
+\\
+\linia\\
+\@author \hfill \@date
+\vspace{4ex}
+\end{center}
+}
+\makeatother
+%%%
+
+% custom footers and headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{Open Window School}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+%
+
+% code listing settings
+\usepackage{listings}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    aboveskip={1.0\baselineskip},
+    belowskip={1.0\baselineskip},
+    columns=fixed,
+    extendedchars=true,
+    breaklines=true,
+    tabsize=4,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=lines,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    keywordstyle=\color[rgb]{0.627,0.126,0.941},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{01,0,0},
+    numbers=left,
+    numberstyle=\small,
+    stepnumber=1,
+    numbersep=10pt,
+    captionpos=t,
+    escapeinside={\%*}{*)}
+}
+
+%%%----------%%%----------%%%----------%%%----------%%%
+
+\begin{document}
+
+\title{Open Window Spanish Mad Libs Coding Project}
+\author{Max Carey, Open Window Spanish Department}
+\date{3/6/2017}
+\maketitle
+Welcome to the coding section of the Spanish Mad Libs project. 
+This tutorial is for those of you who want to work independently and/or cannot make the Lab Sessions. 
+First, you will build the following sample Mad Lib:
+\newline
+
+\noindent\fbox{% What I'm doing to get the text-box is wrapping the parbox in the fbox. Notice this is closed
+    \parbox{\textwidth}{%
+Esto \textbf{[INSERT\_VERB\_SER]} mi primer Mad Lib. \textbf{[INSERT\_POSSESSIVE\_ADJECTIVE]} nombre es Max y soy muy \textbf{[INSERT\_MSN]}. Me gustan las \textbf{[INSERT\_FPN]}.
+}%
+}%
+\newline
+\newline
+So when someone plays the Mad Lib, they could get the following:
+
+\noindent\fbox{% What I'm doing to get the text-box is wrapping the parbox in the fbox. Nocice this is closed
+    \parbox{\textwidth}{%
+Esto \textbf{es} mi primer Mad Lib. \textbf{Mi} nombre es Max y soy muy \textbf{bajo}. Me gustan las \textbf{pizzas}.
+}
+}
+\newline
+\newline
+Let's walk step-by-step to build this Mad Lib. Then you will build your own Mad Lib.
+
+\section*{1. Import the madlib.py file}
+
+The very first line in our program needs to install some code that has already been provided to us (known as the library code). The library code is on a file called madlib.py that is in our current working directory.
+\begin{lstlisting}[label={list:second},caption=Put this at the top of your program:]
+import madlib
+\end{lstlisting}
+
+
+\section*{2. Enter your verb forms as Python Dictionaries}
+
+The next thing we need to do is create a Python Dictionary for the verb "ser" (eventually you will do this for each verb in your Mad Lib). A Python Dictionary is a collection of key-value pairs. In the dictionary below, the keys are: "INF", "1PS", "2PS", etc. The values are the corresponding verb forms: ser, soy, eres, etc.
+
+% code from http://rosettacode.org/wiki/Fibonacci_sequence#Python
+\begin{lstlisting}[label={list:first},caption=Put this dictionary of "ser" below your import line]
+import madlib
+
+ser = {
+    "INF": ["ser"],
+    "1PS": ["soy"],
+    "2PS": ["eres"],
+    "3PS": ["es"], 
+    "1PP": ["somos"],
+    "2PP": ["sois"],
+    "3PP": ["son"],
+}
+\end{lstlisting}
+Starting on line 3, we are creating a Python Dictionary called "ser". 
+Notice that we are only using the present tense and the infinitive forms of the verb "ser":  The definition of our keys are represented in the table below: 
+
+\begin{center}
+\begin{tabular}{ |l|l| }
+  \hline
+  \textbf{Key} & \textbf{Definition}\\ \hline
+  INF & infinitive \\ \hline
+  1PS & 1st person singular \\ \hline
+  2PS & 2nd person singular \\ \hline
+  3PS & 3rd person plural \\ \hline
+  1PP & 1st person plural \\ \hline
+  2PP & 2nd person plural \\ \hline
+  3PP & 3nd person plural \\ \hline
+\end{tabular}
+\end{center}
+
+\section*{3. Create variables for the different words you have chosen \textcolor{red}{(VERBS)}}
+
+Now, we need to create a variable called "verbOne". A variable is like a box that you put a value into. \footnote{In Python, this process is actually known as variable assignment}
+
+\begin{lstlisting}[label={list:second},caption=Add this to the bottom of your code]
+verbOne = ser["3PS"][0]
+\end{lstlisting}
+In the above snippet, we are "pulling" a value from the dictionary that we created in the last section and putting it inside our new variable, verbOne. By entering the key "3PS", we chose "es" to be the value that occupies our variable.
+\newline
+\newline
+Note: The [0] allows us to get the variable without the quotation marks and brackets.
+
+\section*{4. Create variables for the different words you have chosen \textcolor{olive}{(Possessive Adjectives)}}
+
+Now we need to get our possessive adjectives into variables. We will do this almost the same way that we got our variable verbOne. 
+However, the possessive adjective dictionary has already been created and is located in our library code. Notice how we can access it with the code below:
+
+\begin{lstlisting}[label={list:second},caption=Add this to the bottom of your code]
+possAdj = madlib.possessiveAdj["1PS_SO"][0]
+\end{lstlisting}
+The \textbf{madlib.} notation is what allows us to access the library code. If you opened up the madlib.py you would see the following PYthon dictionary:
+
+\begin{lstlisting}[label={list:second},caption=Dictionary for possessive adjectives (located in library code)]
+possessiveAdj = {
+    "1PS_SO": ["Mi"],
+    "1PS_PO": ["Mis"],
+    "2PS_SO": ["Tu"],
+    "2PS_PO": ["Tus"],
+    "3PS_SO": ["Su"],
+    "3PS_PO": ["Sus"],
+    "1PP_MSO": ["Nuestro"],
+    "1PP_MPO": ["Nuestros"],
+    "1PP_FSO": ["Nuestra"],
+    "1PP_FSO": ["Nuestras"],
+    "2PP_MSO": ["Vuestro"],
+    "2PP_MPO": ["Vuestros"],
+    "2PP_FSO": ["Vuestra"],
+    "2PP_FPO": ["Vuestras"],
+    "3PP_SO": ["Vuestras"],
+    "3PP_PO": ["Vuestras"],
+}
+\end{lstlisting}
+One important thing to note is the naming convention for the keys in this dictionary. 
+The three characters to the left indicate person and number of the subject (just like the verbs). 
+The characters to the right of the underscore indicate the number and gender of the object.\newline 
+\newline
+For example, on line two, the key "1PS\_SO" means 1st person singular, singular object.
+
+\section*{5. Create variables for the different words you have chosen \textcolor{blue}{(Nouns and adjectives)}}
+
+Let's get our nouns and our adjectives! To do this we will be using a function called getWord() that is inside our library code, so don't forget to use the \textbf{madlib.} notation.
+
+\begin{lstlisting}[label={list:second},caption=Add this to the bottom of your code]
+adjOne = madlib.getWord("msa")
+nounOne = madlib.getWord("fpn")
+\end{lstlisting}
+What do you think "msa" and "fpn" stand for? 
+We are telling the user that we want a masculine singular adjective and a feminine plural noun!
+\newline
+\newline
+Try running the program and see what happens!
+
+\section*{6. Putting it all together: Creating our Mad Lib}
+
+It's time to create the Mad Lib now. 
+We need to create a variable called myStory and set it equal to our Mad Lib skeleton. 
+Inside the skeleton, we will put a bunch of these bracket paris:  \{\} that represent the blank line in a traditional, paper Mad Lib. 
+Inside of these brackets, we will place our variables.
+
+\begin{lstlisting}[label={list:second},caption=Add this to the bottom of your code]
+myStory = ('Esto {} mi primer Mad Lib: {} nombre es Max, y soy muy {}. Me gustan las {}.'.format(verbOne,possAdj,adjOne,nounOne))
+
+print(myStory)
+\end{lstlisting}
+Do you see what goes inside the .format()? Our variables! The .format() places the variables inside our skeleton in the order that the \{\}s appear. Also don't forget to print your Mad Lib (seen on line 3 above)
+
+
+\section*{7. Getting Google's Text-To-Speech to Read your Mad Lib}
+
+Now for the fun part! We are going to use a library function called getMP3() to get Google's Text To Speech to read our Mad Lib.
+
+\begin{lstlisting}[label={list:second},caption=Add this to the bottom of your code]
+madlib.getMP3(myStory)
+\end{lstlisting}
+We are passing our story into the getMP3() function.
+
+
+\section*{8. Making your Mad Lib program a function}
+
+The next thing we need to do is wrap our code inside a function. We need to declare our function using the \textbf{def} keyword and indent everything that occurs inside our function. Observe in the example below:
+
+\begin{lstlisting}[label={list:second},caption=Your program should look like this now]
+def myMadLib():
+	verbOne = ser["3PS"][0]
+	adjOne = madlib.getWord("msa")
+	nounOne = madlib.getWord("fpn")
+	possAdj = madlib.possessiveAdj["1PS_SO"][0]
+	myStory = ('Esto {} mi primer Mad Lib: {} nombre es Max, ' \
+	 		   'y soy muy {}. Me gustan las {}.'.format(verbOne,possAdj,adjOne,nounOne))
+	print(myStory)
+	madlib.getMP3(myStory)
+
+myMadLib()
+\end{lstlisting}
+
+Don't forget to call your function. That's what we are doing on line 11.
+
+\section*{9. Give your data to the getRandomWord() function}
+
+When you run your program and play your Mad Lib, enter random when the program prompts you for specific nouns and adjectives. 
+Does it work?
+No.
+This is because the program doesn't have any lists of words to draw from.
+You will have to make use of the lists of words that you investigated in Part 1 and use your knowledge of Spanish gender and number to create sublists. 
+Fortunately, the word lists are located on the library code so we can access them with the \textbf{madlib.} notation. 
+
+\begin{lstlisting}[label={list:second},caption=Add this to the top of your code (below the import line)]
+fsaDict = madlib.adj_a + madlib.adj_e + madlib.adj_l
+\end{lstlisting}
+On line 1, we create a list called fsaDict, "fsa" stands for feminine singular adjective. 
+Therefore, we add the lists adj\_a, ad j\_e, and adj\_l to our new list (fsaDict). 
+Remember: these words  end in the suffixes -a (loca), -e (inteligente), and -l (social), respectively. 
+Don't forget that even though you may consider adjectives that end in -l and -e to be gender neutral, they still count as either masculine or feminine because they take the gender of the noun they modify. 
+Technically, adjectives don't don't have grammatical gender.
+\newline
+\newline
+In total, you will need 8 "sub-dictionaries": fsaDict, fpaDict, msaDict, mpaDict, msnDict, mpnDict, fsnDict, and fpnDict.
+\newline
+\newline
+After creating your dictionaries you will need to "activate" them. We do this by passing our newly created lists into the setLists() function of the library code. Go ahead and copy the following code to your Mad Lib.
+
+\begin{lstlisting}[label={list:second},caption=Copy this code(below the creation of your lists)]
+madlib.setLists(fsaDict, fpaDict, msaDict, mpaDict, msnDict, mpnDict, fsnDict, fpnDict)
+\end{lstlisting}
+It is a good idea to copy and paste this line because you need the arguments to be the same order as they appear in this tutorial. 
+
+\section*{10. Make your own Mad Lib}
+
+Follow the same steps above to create and implement your own Mad Lib.
+\newline
+\newline
+\textbf{One thing that is important to remember:} For possessive adjectives and verbs, the user doesn't enter them into the computer. Instead, you (the programmer) enters them in. On the other hand, for nouns and adjectives, the user does enter them. This was done intentionally so that you can complete Part III.
+
+\end{document}
